@@ -155,20 +155,20 @@ export default function Home() {
                   <p className="">#{Kd_skema}</p>
                   <p className="text-sm">{Alamat} | {No_hp}</p>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex gap-3">
                   <button
                     type="button"
-                    className="text-sm text-blue-500"
+                    className="bg-blue-200 rounded-md border-blue-600  p-2 text-sm text-blue-500"
                     onClick={() => handleOpenDetail(_id)}
                   >
-                    Detail Peserta
+                    <Icon icon="mdi:eye-outline" className="text-[#3e8fda]" />
                   </button>
                   <button
                     type="button"
-                    className="text-sm text-red-500"
+                    className="bg-red-200 rounded-md border-red-600  p-2 text-sm text-red-500"
                     onClick={() => handleDelete(_._id)}
                   >
-                    Delete
+                    <Icon icon="bx:trash"  className="text-[#da3e3e]" />
                   </button>
                 </div>
               </div>
