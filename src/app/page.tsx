@@ -1,13 +1,17 @@
 'use client'
 
 import React from "react";
-import { createPeserta, getPeserta, updatePeserta } from "./api/peserta";
+import { createPeserta, deletePeserta, getPeserta, updatePeserta } from "./api/peserta";
 import { Icon } from '@iconify/react';
+import { getSkema } from "./api/skema";
 
 
 export default function Home() {
   const [data, setData] = React.useState([])
+  const [schemeData, setschemeData] = React.useState([])
   const [selectedData, setselectedData]: any = React.useState();
+  
+  const [keyName, setKeyName] = React.useState('')
 
   const [id, setId] = React.useState('')
   const [nama, setNama] = React.useState('')
@@ -24,6 +28,7 @@ export default function Home() {
 
   React.useEffect(() => {
     handleGet()
+    handleScheme()
   }, [])
 
   function handleGet() {
@@ -31,6 +36,14 @@ export default function Home() {
       .then((res) => {
         console.log(res.data)
         setData(res.data)
+      })
+  }
+
+  function handleScheme() {
+    getSkema()
+      .then((res) => {
+        console.log(res.data)
+        setschemeData(res.data)
       })
   }
 
@@ -71,11 +84,17 @@ export default function Home() {
     })
   }
 
+  function handleDelete(id:string){
+    deletePeserta(id)
+    .then(()=>{
+      handleGet()
+    })
+  }
+
   function handleCreatePeserta() {
     createPeserta({
       Nm_peserta: nama,
       Jenis: jenis,
-      Jml_unit: totalUnit,
       Jekel: gender,
       Alamat: address,
       No_hp: phone,
@@ -86,13 +105,23 @@ export default function Home() {
     })
   }
 
+  function handleSearch(key:string){
+    getPeserta('', key)
+      .then((res) => {
+        console.log(res.data)
+        setData(res.data)
+      })
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center ">
       <div className="bg-white w-full container min-h-[50vh] p-4 rounded-lg text-black flex flex-col gap-5">
         <div className="flex justify-between text-sm">
           <p className="text-xl font-medium opacity-70">Data Peserta</p>
           <div className="flex gap-3">
-            <input placeholder="Cari Peserta" className="p-2 border border-black rounded-md">
+            <input 
+            onChange={(e)=>handleSearch(e.target.value)}
+            placeholder="Cari Peserta" className="p-2 border border-black rounded-md">
 
             </input>
             <button
@@ -105,7 +134,7 @@ export default function Home() {
           </div>
         </div>
         <div className="">
-          {data?.map((_, i) => {
+          {data?.map((_:any, i) => {
             const { _id, Kd_skema, Nm_peserta, Jekel, Alamat, No_hp } = _
             return (
               <div key={i} className="flex justify-between items-center">
@@ -126,13 +155,22 @@ export default function Home() {
                   <p className="">#{Kd_skema}</p>
                   <p className="text-sm">{Alamat} | {No_hp}</p>
                 </div>
-                <button
-                  type="button"
-                  className="text-sm text-blue-500"
-                  onClick={() => handleOpenDetail(_id)}
-                >
-                  Detail Peserta
-                </button>
+                <div className="flex flex-col gap-3">
+                  <button
+                    type="button"
+                    className="text-sm text-blue-500"
+                    onClick={() => handleOpenDetail(_id)}
+                  >
+                    Detail Peserta
+                  </button>
+                  <button
+                    type="button"
+                    className="text-sm text-red-500"
+                    onClick={() => handleDelete(_._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             )
           })}
@@ -171,6 +209,28 @@ export default function Home() {
                 >
                   <option value="Pria">Pria</option>
                   <option value="Wanita">Wanita</option>
+                </select>
+                
+                <select
+                  value={kdSchema}
+                  onChange={(e) => setKdSchema(e.target.value)}
+                  className="border p-2 rounded-md"
+                  name=""
+                  id=""
+                >
+                  {
+                    schemeData.map((_:any, i)=>{
+                      return(
+                        <option 
+                          key={i} 
+                          value={_._id} 
+                          className=""
+                        >
+                          {_.Nm_skema}
+                        </option>
+                      )
+                    })
+                  }
                 </select>
                 <input
                   type="tel"

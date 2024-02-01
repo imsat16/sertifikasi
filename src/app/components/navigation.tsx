@@ -3,7 +3,7 @@ import React from 'react'
 
 const Navigation = () => {
   return (
-    <nav className='bg-red-500'>
+    <nav className='bg-blue-500 text-white'>
         <div className="container mx-auto p-4 flex gap-5">
             <Link href={'/'}>
                 Home

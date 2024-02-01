@@ -27,9 +27,9 @@ export async function createSkema(props:Skema) {
     }
 }
 
-export async function updateSkema(props:Skema) {
+export async function updateSkema(id:string,props:Skema) {
     try {
-        const res = await api.post(`/skema`,{
+        const res = await api.put(`/skema${id?`/${id}`:''}`,{
             ...props
         });
         return res.data;
