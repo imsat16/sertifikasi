@@ -16,7 +16,11 @@
   }
 }
 
-body {
+body{
+  background: #f3f3f3
+}
+
+/* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -30,4 +34,4 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
+} */
